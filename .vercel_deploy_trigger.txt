@@ -1,0 +1,2 @@
+# Trigger Vercel redeploy
+# This file is intentionally empty – its presence forces a new commit.
