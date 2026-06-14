@@ -5,6 +5,7 @@ import { TaskModal } from './components/TaskModal';
 import { MetricsPanel } from './components/MetricsPanel';
 import { ReleaseNotesModal } from './components/ReleaseNotesModal';
 import { GithubSyncModal } from './components/GithubSyncModal';
+import { GanttChart } from './components/GanttChart';
 import { useTaskStore } from './store/taskStore';
 import type { Task } from './data/roadmapData';
 import './App.css';
@@ -16,7 +17,7 @@ function App() {
   const [isReleaseNotesOpen, setIsReleaseNotesOpen] = useState(false);
   const [isGithubSyncOpen, setIsGithubSyncOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | undefined>(undefined);
-  const [currentView, setCurrentView] = useState<'board' | 'metrics'>('board');
+  const [currentView, setCurrentView] = useState<'board' | 'metrics' | 'gantt'>('board');
   const dashboardRef = useRef<HTMLDivElement>(null);
   
   const isReadonly = new URLSearchParams(window.location.search).get('readonly') === 'true';
@@ -126,6 +127,12 @@ function App() {
                 Board
               </button>
               <button 
+                className={`btn-toggle ${currentView === 'gantt' ? 'active' : ''}`}
+                onClick={() => setCurrentView('gantt')}
+              >
+                Gantt
+              </button>
+              <button 
                 className={`btn-toggle ${currentView === 'metrics' ? 'active' : ''}`}
                 onClick={() => setCurrentView('metrics')}
               >
@@ -162,6 +169,16 @@ function App() {
           <div className="error">Помилка: {error}</div>
         ) : currentView === 'metrics' ? (
           <MetricsPanel tasks={tasks} />
+        ) : currentView === 'gantt' ? (
+          <GanttChart 
+            tasks={filterAssignee ? tasks.filter(t => t.assignee === filterAssignee) : tasks} 
+            onTaskClick={(task) => {
+              if (!isReadonly) {
+                setEditingTask(task);
+                setIsModalOpen(true);
+              }
+            }} 
+          />
         ) : (
           <TaskList 
             tasks={tasks} 
