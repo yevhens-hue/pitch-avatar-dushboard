@@ -11,6 +11,7 @@ interface TaskListProps {
   tasks: Task[];
   filterAssignee: string | null;
   onEditTask: (task: Task) => void;
+  isReadonly?: boolean;
 }
 
 const STATUSES: { id: TaskStatus; label: string }[] = [
@@ -21,7 +22,7 @@ const STATUSES: { id: TaskStatus; label: string }[] = [
   { id: 'milestone', label: 'Майлстоун' }
 ];
 
-export const TaskList: React.FC<TaskListProps> = ({ tasks, filterAssignee, onEditTask }) => {
+export const TaskList: React.FC<TaskListProps> = ({ tasks, filterAssignee, onEditTask, isReadonly = false }) => {
   const updateTaskStatus = useTaskStore(state => state.updateTaskStatus);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
@@ -94,7 +95,7 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, filterAssignee, onEdi
               <SortableContext items={colTasks.map(t => t.id)} strategy={rectSortingStrategy}>
                 <div className="task-grid kanban-grid">
                   {colTasks.map(task => (
-                    <TaskCard key={task.id} task={task} onClick={() => onEditTask(task)} />
+                    <TaskCard key={task.id} task={task} onClick={() => onEditTask(task)} isReadonly={isReadonly} />
                   ))}
                   {/* Drop zone placeholder for empty columns */}
                   {colTasks.length === 0 && (
