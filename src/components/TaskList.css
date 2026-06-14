@@ -1,32 +1,56 @@
-.task-list-container {
+.task-list-container.kanban-board {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
+  gap: var(--space-6);
+  overflow-x: auto;
+  padding-bottom: var(--space-4);
+  align-items: flex-start;
 }
 
-.task-group {
+.kanban-col {
+  flex: 0 0 320px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  border: 1px solid var(--border-light);
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
 }
 
-.group-title {
-  font-size: 1.5rem;
-  color: var(--text-primary);
-  border-bottom: 1px solid var(--border-light);
+.kanban-col .group-title {
+  margin-bottom: var(--space-4);
+  font-size: 1.1rem;
+  border-bottom: 2px solid var(--border-light);
   padding-bottom: var(--space-2);
-  display: inline-block;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.task-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+.task-count {
+  background: var(--bg-surface-solid);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.kanban-grid {
+  display: flex;
+  flex-direction: column;
   gap: var(--space-4);
+  min-height: 100px;
+}
+
+.empty-col-dropzone {
+  flex: 1;
+  min-height: 100px;
+  border: 2px dashed transparent;
+  border-radius: var(--radius-md);
+  transition: border-color 0.2s;
 }
 
 .empty-state {
-  padding: var(--space-8);
   text-align: center;
-  color: var(--text-tertiary);
-  font-size: 1.1rem;
+  padding: var(--space-8);
+  color: var(--text-secondary);
 }

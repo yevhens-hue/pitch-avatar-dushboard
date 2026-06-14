@@ -1,9 +1,12 @@
 import React from 'react';
 import type { Task } from '../data/roadmapData';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import './TaskCard.css';
 
 interface TaskCardProps {
   task: Task;
+  onClick?: () => void;
 }
 
 const getStatusLabel = (status: string) => {
@@ -17,9 +20,25 @@ const getStatusLabel = (status: string) => {
   }
 };
 
-export const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
+export const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: task.id, data: { task } });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    cursor: 'grab',
+  };
+
   return (
-    <div className="task-card glass-panel animate-fade-in">
+    <div 
+      ref={setNodeRef} 
+      style={style} 
+      {...attributes} 
+      {...listeners} 
+      className={`task-card glass-panel animate-fade-in ${isDragging ? 'dragging' : ''}`}
+      onClick={onClick}
+    >
       <div className="task-header">
         <span className={`badge ${task.status}`}>
           {getStatusLabel(task.status)}
